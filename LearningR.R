@@ -1,3 +1,4 @@
+#31 January 2019
 vec1
 length(vec1)
 logic1 <- vec1<15
@@ -65,3 +66,4 @@ table(airquality$Month[c(1:60)], airquality$Temp[c(1:60)])
 #error handling
 options(show.error.messages=T)
 1<-1
+
