@@ -50,3 +50,25 @@ gg <- ggplot(midwest, aes(x=area, y=poptotal)) + geom_point(aes(col=state)) +
   geom_smooth(method="lm", col="red") + coord_cartesian(xlim=c(0,0.1), ylim=c(0, 1000000)) + 
   labs(title="Area Vs Population", subtitle="From midwest dataset", y="Population", x="Area", caption="Midwest Demographics")
 print(gg)
+
+##Tutorial2: Theme
+library(ggplot2)
+gg <- ggplot(midwest, aes(x=area, y=poptotal)) + geom_point(aes(col=state, size=popdensity)) + geom_smooth(method = "loess", se=F) + xlim(c(0,0.1)) + ylim(c(0,500000)) + labs(title="area vs population", y="population", x="area", caption = "source: midwest")
+print(gg)
+
+#manipulating axis 
+gg + theme(plot.title = element_text(size=20, face="bold", family="American Typewriter", color="tomato", hjust = 0.5, lineheight = 1.2), 
+           plot.caption = element_text(size = 15), 
+           axis.title.x = element_text(size=15, angle=90), 
+           axis.title.y=element_text(size=15, angle = 0),  # Y axis title
+           axis.text.x=element_text(size=10, 
+                                    angle = 30,
+                                    vjust=.5),  # X axis text
+           axis.text.y=element_text(size=10))
+
+#manipulating legend
+gg + labs(color="STate", size="density")
+gg + guides(color=guide_legend("state"), size=guide_legend("density"))
+gg + scale_color_discrete(name="state")
+
+#rest after animint tutorial
