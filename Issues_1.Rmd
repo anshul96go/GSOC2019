@@ -1,0 +1,32 @@
+---
+title: "Errors/Issues in animint use for beginners"
+output:
+  html_document:
+    df_print: paged
+---
+```{r}
+library(ggplot2)
+library(animint)
+```
+
+
+```{r warning=FALSE}
+gg_anm2_sel <- ggplot(df) + geom_line(aes(x=df$Trade.Date, y=df$USD.AF8.FUT, 
+                                          linetype=df$bucket, clickSelects=df$bucket))
+                                          #problem with linetype & clickSelects=df$bucket 
+                                          #ok with linetype & clickSelects=bucket
+plot <- list(plot=gg_anm2_sel)
+library(animint)
+structure(plot, class="animint")
+```
+
+```{r warning=FALSE}
+gg_anm2_sel <- ggplot(df) + geom_line(aes(x=df$Trade.Date, y=df$USD.AF8.FUT, 
+                                          linetype=bucket, clickSelects=bucket))
+plot <- list(plot=gg_anm2_sel)
+library(animint)
+structure(plot, class="animint")
+
+##Giving correct grph with some warnings
+```
+
