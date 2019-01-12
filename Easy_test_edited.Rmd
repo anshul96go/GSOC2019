@@ -1,0 +1,41 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+#library(ggplot2)
+library(reshape2)
+library(animint2)
+```
+
+```{r}
+#reading and conversion
+df <- read.csv("futures data.csv")
+df$Trade.Date <- as.Date(df$Trade.Date, format="%d/%m/%y")
+df_new <- melt(df[, c("Trade.Date", "USD.AF8.FUT", "JPY.AF8.FUT", "GBP.AF8.FUT", "EUR.AF8.FUT")], id="Trade.Date")
+bp<-c("2011-01-01", "2012-01-01", "2013-01-01", "2014-01-01", "2015-01-01", "2016-01-01", 
+           "2017-01-01", "2018-01-01")
+bpoints = as.Date(bp, format="%Y-%m-%d")
+df_new$year <- as.numeric(format(df$Trade.Date,'%Y'))
+df_new$bucket <- cut(df_new$year, breaks = c(2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018))
+head(df_new)
+```
+
+```{r warning=FALSE}
+theme_config = theme(plot.background = element_rect(fill = "lightsteelblue2", colour = "red"), plot.title = element_text(size = 20, face="bold", hjust = 0.5), 
+        plot.subtitle = element_text(size = 10, hjust = 0.5), 
+        plot.caption = element_text(size = 10), 
+        axis.text.x = element_text(size = 10, angle=30, hjust = 0.5), 
+        axis.text.y = element_text(size=10, angle = 30), 
+        panel.background = element_rect(fill = "pink"),
+        panel.grid.minor =element_line(color = "white", linetype = "dashed")) 
+
+gg_anm2_sel <- ggplot(df_new) + geom_freqpoly(binwidth=5, aes(x=value, color=variable), showSelected.variable=df_new$variable) + labs(title="Futures FX Data: Frequency Polygon", subtitle="2010-2018", x="Price", y="Count", caption="Source: MSEI") + theme_config  + scale_x_continuous(breaks=seq(0, 150, 5))
+
+gg_anm2_out <- ggplot(df_new) + geom_point(showSelected.variable=df_new$bucket, aes(x=df_new$Trade.Date, y=value, color=variable, fill= bucket)) + labs(title="Futures FX Data: Data Points", subtitle="As per year selected", x="Dates", y="Future Exchange Rate(INR)", caption="Source: MSEI") + theme_config 
+
+plot <- list(plot1=gg_anm2_sel, plot2=gg_anm2_out)
+#structure(plot, class="animint2")
+animint2gist(plot, description = "Futures Currency Market")
+```
+
